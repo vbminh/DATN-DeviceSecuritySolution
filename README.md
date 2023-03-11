@@ -1,4 +1,4 @@
-Project Name: Device Security Solution
+Project Name: Device Security Solution\n
 Type: System app
 Background: Android SDK, Samsung SDK, Google FCM
 Field: DATN
