@@ -1,20 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.securityapp">
+    android:sharedUserId="andorid.uid.system">
+    <uses-permission
+        android:name="android.permission.BIND_DEVICE_ADMIN"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="com.samsung.android.knox.permission.KNOX_PROXY_ADMIN_INTERNAL" />
+    <uses-permission android:name="com.samsung.android.knox.permission.KNOX_KIOSK_MODE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.TYPE_APPLICATION_OVERLAY" />
 
     <application
+        android:name="App.myApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_app"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SecurityApp"
+        android:theme="@style/Theme.DeviceSecurity"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="View.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name="View.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name="View.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +43,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="service.LoginReminderService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name="service.LoginForegroundService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name="service.FloatingIconService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/screen_layout.xml" value="0.1" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/watermark_login_layout.xml" value="0.19405940594059407" />
       </map>
     </option>
   </component>
