@@ -1,5 +1,7 @@
 package View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,9 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.devicesecurity.R;
+import com.application.devicesecurity.R;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText txtUsername, txtPassword;
@@ -114,4 +114,5 @@ public class LoginActivity extends AppCompatActivity {
         btnShowHidePw.setEnabled(false);
         btnShowHidePw.setVisibility(View.INVISIBLE);
     }
+
 }

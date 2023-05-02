@@ -10,10 +10,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 
-import service.FloatingIconService;
-import service.LoginForegroundService;
+import com.application.devicesecurity.R;
+
+import service.DSSForegroundService;
 
 public class MainActivity extends AppCompatActivity {
+
     private static final int REQUEST_CODE_SYSTEM_ALERT_WINDOWN = 101;
 
     @Override
@@ -21,14 +23,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //KnoxUtils.setActiveAdmin();
-        //setPermission();
         setActiveS();
-        finish();
     }
 
     private void setActiveS() {
         //Khoi chay service trong nen
-        Intent serviceIntent = new Intent(this,  LoginForegroundService.class);
+        Intent serviceIntent = new Intent(this,  DSSForegroundService.class);
         startService(serviceIntent);
 
         //Kiem tra trang thai dang nhap
@@ -40,24 +40,13 @@ public class MainActivity extends AppCompatActivity {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
             loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(loginIntent);
+            finish();
         }
         else {//Chuyen den giao dien trang chu
             Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
             homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(homeIntent);
-        }
-    }
-
-    private void setPermission() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this))
-        {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-            startActivityForResult(intent,REQUEST_CODE_SYSTEM_ALERT_WINDOWN);
-        }
-        else {
-            Intent intent = new Intent(this, FloatingIconService.class);
-            startService(intent);
-
+            finish();
         }
     }
 

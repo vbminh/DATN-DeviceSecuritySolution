@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.application.dssclient">
+
+    <uses-permission
+        android:name="android.permission.BIND_DEVICE_ADMIN"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="com.samsung.android.knox.permission.KNOX_PROXY_ADMIN_INTERNAL" />
+    <uses-permission android:name="com.samsung.android.knox.permission.KNOX_KIOSK_MODE" />
+    <uses-permission android:name="com.samsung.android.knox.permission.KNOX_APP_MGMT" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
+    <uses-permission android:name="android.permission.TYPE_APPLICATION_OVERLAY" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission
+        android:name="android.permission.ACCESS_KEYGUARD_SECURE_STORAGE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.DEVICE_POWER"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <application
+        android:name="App.myApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/icon_app"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.DSSClient"
+        tools:targetApi="31">
+        <activity
+            android:name="view.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name="view.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name="view.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service android:name="service.LoginReminderService" android:exported="false" android:enabled="true"/>
+
+        <service android:name="service.LocationTrackingService" android:exported="false" android:enabled="true"/>
+
+        <service android:name="service.ForegroundService"
+            android:exported="false"
+            android:enabled="true"/>
+
+        <service android:name="service.PrintWatermarkService" android:exported="false" android:enabled="true"/>
+
+        <service android:name="service.BlockAppsService" android:exported="false" android:enabled="true"/>
+
+
+        <service android:name="service.MyNotificationService"
+            android:exported="false"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService"/>
+            </intent-filter>
+
+            <meta-data android:name="android.service.notification.default_filter_types"
+                android:value="conversations|alerting"/>
+
+            <meta-data android:name="android.service.notification.disabled_filter_types"
+                android:value="ongoing|silent"/>
+    </service>
+
+
+        -<service android:name="service.FCMService" android:exported="true" android:enabled="true">
+
+
+        -<intent-filter>
+
+        <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+
+    </intent-filter>
+
+    </service>
+
+
+        -<receiver android:name="receiver.EnterpriseDeviceAdminReceiver" android:exported="false" android:permission="android.permission.BIND_DEVICE_ADMIN">
+
+        <meta-data android:name="android.app.device_admin" android:resource="@xml/device_admin_receiver"/>
+
+
+        -<intent-filter>
+
+        <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+
+    </intent-filter>
+
+    </receiver>
+    </application>
+
+
+
+</manifest>

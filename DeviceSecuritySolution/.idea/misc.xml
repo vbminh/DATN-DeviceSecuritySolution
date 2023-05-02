@@ -3,10 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/drawable/button_login.xml" value="0.1965" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/activity_home.xml" value="0.1" />
         <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/activity_login.xml" value="0.1" />
-        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/screen_layout.xml" value="0.1" />
-        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/watermark_login_layout.xml" value="0.19405940594059407" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/activity_main.xml" value="0.17074275362318841" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DeviceSecuritySolution/app/src/main/res/layout/watermark_logout_layout.xml" value="0.17074275362318841" />
       </map>
     </option>
   </component>

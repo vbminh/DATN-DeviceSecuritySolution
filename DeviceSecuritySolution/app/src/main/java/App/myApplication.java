@@ -2,8 +2,7 @@ package App;
 
 import android.app.Application;
 
-public class myApplication  extends Application {
-
+public class myApplication extends Application {
     private static myApplication instance;
 
     @Override
@@ -16,4 +15,3 @@ public class myApplication  extends Application {
         return instance;
     }
 }
-
