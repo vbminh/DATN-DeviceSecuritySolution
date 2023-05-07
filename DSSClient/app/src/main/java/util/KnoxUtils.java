@@ -1,6 +1,7 @@
 package util;
 
 import android.content.ComponentName;
+import android.util.Log;
 
 import com.samsung.android.knox.EnterpriseDeviceManager;
 import com.samsung.android.knox.application.ApplicationPolicy;
@@ -17,7 +18,7 @@ import receiver.EnterpriseDeviceAdminReceiver;
 
 public class KnoxUtils {
 
-    private static final String TAG = KnoxUtils.class.getSimpleName();
+    private static final String TAG = "Knox1";
     private static final int BACK_KEY = 4;
     private static final int HOME_KEY = 3;
     private static final int RECENT_KEY = 187;
@@ -48,9 +49,11 @@ public class KnoxUtils {
         if (!isAdminActive()) {
             Method method;
             try {
+                Log.e(TAG, "setActiveAdmin");
                 method = EnterpriseDeviceManager.class.getMethod("setActiveAdmin",
                         ComponentName.class, boolean.class);
                 method.invoke(getEDM(), getComponentName(), false);
+                Log.e(TAG, "success");
             } catch (NoSuchMethodException e) {
                 // Log.e(TAG, e.getMessage(), e);
             } catch (IllegalArgumentException e) {

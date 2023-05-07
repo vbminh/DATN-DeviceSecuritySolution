@@ -3,9 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/drawable/custom_edittext.xml" value="0.1" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/drawable/custom_item.xml" value="0.1" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/drawable/custom_line.xml" value="0.1" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/drawable/custom_policy_button.xml" value="0.1" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/drawable/device_info_content.xml" value="0.1" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/layout/activity_app_in_black_list.xml" value="0.22" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/layout/activity_black_list.xml" value="0.1" />
         <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/layout/activity_home.xml" value="0.1" />
         <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/layout/activity_main.xml" value="0.17074275362318841" />
+        <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/layout/black_list_app_item.xml" value="0.1" />
         <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/layout/watermark_login_layout.xml" value="0.1356447688564477" />
         <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/layout/watermark_logout_layout.xml" value="0.25" />
         <entry key="..\:/Practice/DATN-DeviceSecuritySolution/DSSClient/app/src/main/res/xml/device_admin_receiver.xml" value="0.1" />

@@ -21,7 +21,7 @@ import util.KnoxUtils;
 public class BlockAppsService extends Service {
     String policy;
 
-    private final static String TAG = "BlockAppService";
+    private final static String TAG = "BlockAppService1";
     private static final List<String> blacklist = new ArrayList<String>();
 
     {
@@ -62,7 +62,7 @@ public class BlockAppsService extends Service {
 
     private void init() {
         SharedPreferences sharedPreferences = getSharedPreferences("my_app_prefs", Context.MODE_PRIVATE);
-        policy = sharedPreferences.getString("policy", "11101");
+        policy = sharedPreferences.getString("policy", "11111");
 
         Log.e(TAG, policy);
 
@@ -75,7 +75,7 @@ public class BlockAppsService extends Service {
                 @Override
                 public void run() {
                     blockApp();
-                    //Goi lai sau 2s
+                    //Goi lai sau 1s
                     handler.postDelayed(this, 1000);
                 }
             };
@@ -89,12 +89,10 @@ public class BlockAppsService extends Service {
     private void blockApp() {
         long time = System.currentTimeMillis();
         List<UsageStats> runningApps = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000, time);
-        Log.e("BlockAppService", runningApps.size() + "");
+        Log.e(TAG, runningApps.size() + "");
         for(UsageStats app : runningApps) {
-            if(blacklist.contains(app.getPackageName())) {
-                Log.e("BlockAppService", app.getPackageName());
+            if(blacklist.contains(app.getPackageName()))
                 KnoxUtils.stopApp(app.getPackageName());
-            }
         }
     }
 }

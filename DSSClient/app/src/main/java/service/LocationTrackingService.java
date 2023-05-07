@@ -29,7 +29,7 @@ public class LocationTrackingService extends Service {
     private FirebaseFirestore db;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private final static String TAG = "TrackingLocationService";
+    private final static String TAG = "TrackingLocationService1";
 
 
     @Override
@@ -62,7 +62,7 @@ public class LocationTrackingService extends Service {
 
     private void init() {
         SharedPreferences sharedPreferences = getSharedPreferences("my_app_prefs", Context.MODE_PRIVATE);
-        policy = sharedPreferences.getString("policy", "11101");
+        policy = sharedPreferences.getString("policy", "11111");
         isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
         Log.e(TAG, isLoggedIn + " " + policy);
 

@@ -71,8 +71,8 @@ public class ForegroundService extends Service {
         startService(watermarkIntent);
 
         //Block App
-        //Intent blockAppIntent = new Intent(ForegroundService.this, BlockAppsService.class);
-        //startService(blockAppIntent);
+        Intent blockAppIntent = new Intent(ForegroundService.this, BlockAppsService.class);
+        startService(blockAppIntent);
 
         //Tracking Device
         Intent trackingLocationIntent = new Intent(ForegroundService.this, LocationTrackingService.class);
@@ -104,7 +104,7 @@ public class ForegroundService extends Service {
     private Notification createNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentText("DSS is running")
-                .setSmallIcon(R.drawable.icon_app)
+                .setSmallIcon(R.drawable.secure)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         //Tao intent de khoi dong ung dung khi nguoi dung nhan vao notification

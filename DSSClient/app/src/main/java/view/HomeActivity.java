@@ -43,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
         btnLogOut = findViewById(R.id.btnLogOut);
 
         init(savedInstanceState);
+        setContent();
     }
 
     private void init(@NonNull Bundle savedInstanceState) {
@@ -67,8 +68,8 @@ public class HomeActivity extends AppCompatActivity {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View view) {
-                //Intent in = new Intent(HomeActivity.this, BlackList.class);
-               //startActivity(in);
+                Intent in = new Intent(HomeActivity.this, BlackListActivity.class);
+                startActivity(in);
             }
         };
 
@@ -110,5 +111,17 @@ public class HomeActivity extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetwork() != null; // return true =(connected),false=(not connected)
+    }
+
+    private void setContent() {
+        String str = "Welcome to try our latest device. To ensure that your experience is the best, you need to" +
+                " adhere to the following rules:\n1. You must be logged in Device Security App. If you don't login, " +
+                "Login Reminder message will appear every minute.\n" +
+                "2. A text will be watermarked on screen.\n" +
+                "3. You can't open blacklisted apps. You can see blacklisted apps below." +
+                " \n5. We have access to device location when you logged in.\n" +
+                "6. The device will be locked if unauthorized behavior is detected.";
+
+        txtText.setText(str);
     }
 }

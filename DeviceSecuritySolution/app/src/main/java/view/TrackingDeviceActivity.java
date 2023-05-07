@@ -109,7 +109,7 @@ public class TrackingDeviceActivity extends AppCompatActivity implements OnMapRe
                                     if(latitude != Double.MIN_VALUE && longitude != Double.MIN_VALUE) {
                                         map.clear();
                                         map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(doc.getString("serialNo")));
-                                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10));
+                                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 5));
                                     }
                                     else
                                         Toast.makeText(TrackingDeviceActivity.this, "This device hasn't updated its location", Toast.LENGTH_SHORT).show();

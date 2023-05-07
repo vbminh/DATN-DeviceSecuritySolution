@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText txtUsername, txtPassword;
     private CheckBox CbxRemember;
-    private Button btnLogin, btnCancel, btnShowHidePw;
+    private Button btnLogin, btnShowHidePw;
     private DES des;
 
     private final static String TAG = "LoginActivity";
@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         CbxRemember = findViewById(R.id.cbxRemember);
         btnShowHidePw = findViewById(R.id.btnShowHidePw);
         btnLogin = findViewById(R.id.btnLogin);
-        btnCancel = findViewById(R.id.btnCancelLogin);
 
         Intent watermarkIntent = new Intent(this, PrintWatermarkService.class);
         startService(watermarkIntent);
@@ -109,14 +108,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ClickLoginButton();
-            }
-        });
-
-        //Click Cancel
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
             }
         });
 

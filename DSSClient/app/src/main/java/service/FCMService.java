@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.util.Log;
+import android.view.IWindowManager;
 
 import androidx.annotation.NonNull;
 
+import com.android.internal.widget.LockPatternUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,6 +23,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,31 +32,33 @@ import algorithm.DES;
 import module.InformationDevice;
 
 public class FCMService extends FirebaseMessagingService {
-    private static final String TAG = "MyFirebaseService";
+    private static final String TAG = "FCMService1";
 
     private InformationDevice informationDevice;
-    private DES des;
 
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        Log.e(TAG, "onNewToken: token: "+ token + "\nSerialNo: " + "15032001" /*Build.getSerial()*/ );
+        Log.e(TAG, "onNewToken: "+ token );
+        Log.e(TAG, "onNewToken: "+ Build.getSerial() );
 
         SharedPreferences sharedPreferences = getSharedPreferences("my_app_prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("policy", "11101");
+        editor.putString("policy", "11111");
         editor.apply();
 
-        informationDevice = new InformationDevice("11101" , "15032001"/*Build.getSerial()*/ , token);
-        des = new DES();
+        informationDevice = new InformationDevice("11111" , Build.getSerial() , token);
         pushNewInformationToServer();
     }
 
     private void pushNewInformationToServer() {
-        Map<String , Object> info = new HashMap<>();
-        info.put("policy" , des.Encrypt(informationDevice.getPolicy()));
-        info.put("serialNo" , informationDevice.getSerialNo());
-        info.put("token" , informationDevice.getToken());
+        Map<String, Object> info = new HashMap<>();
+        info.put("policy", informationDevice.getPolicy());
+        info.put("serialNo", informationDevice.getSerialNo());
+        info.put("token", informationDevice.getToken());
+        info.put("Model Name", Build.MODEL);
+        info.put("Android SDK", Build.VERSION.SDK_INT);
+        info.put("Android Version", Build.VERSION.RELEASE);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("informations")
                 .document(informationDevice.getSerialNo())
@@ -58,19 +66,20 @@ public class FCMService extends FirebaseMessagingService {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Log.e(TAG, "onSuccess: " );
+                        Log.e(TAG, "onSuccess: ");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: " );
+                        Log.e(TAG, "onFailure: ");
                     }
                 });
 
-        Map<String , Object> loca = new HashMap<>();
-        loca.put("latitude" ,null);
-        loca.put("longitude" , null);
+        Map<String, Object> loca = new HashMap<>();
+        loca.put("serialNo",Build.getSerial());
+        loca.put("latitude", Double.MIN_VALUE);
+        loca.put("longitude", Double.MIN_VALUE);
 
         db.collection("locations")
                 .document(informationDevice.getSerialNo())
@@ -78,62 +87,52 @@ public class FCMService extends FirebaseMessagingService {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Log.e(TAG, "onSuccess: " );
+                        Log.e(TAG, "onSuccess: ");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: " );
+                        Log.e(TAG, "onFailure: ");
                     }
                 });
 
-        Map<String , Object> user = new HashMap<>();
-        user.put("username" ,informationDevice.getSerialNo());
-        user.put("password" , des.Encrypt("123"));
+        Map<String, Object> user = new HashMap<>();
+        user.put("username",Build.getSerial());
+        user.put("password", "123");
 
-        db.collection("users")
+        db.collection("user")
                 .document(informationDevice.getSerialNo())
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Log.e(TAG, "onSuccess: " );
+                        Log.e(TAG, "onSuccess: ");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: " );
+                        Log.e(TAG, "onFailure: ");
                     }
                 });
     }
 
+
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-//        super.onMessageReceived(remoteMessage);
-//        RemoteMessage.Notification notification = remoteMessage.getNotification();
-//        if (notification != null) {
-//            Log.e(TAG, "Message Notification Body: " + remoteMessage.getData().get("title"));
-//            String action = notification.getTitle();
-//
-//            if(action.equals("lockDevice")) {
-//              //  Log.e(TAG, "Message Notification Body:1 " + notification.getTitle());
-//                checkDataFromServer();
-//                Log.e(TAG, "Message Notification Body:2 " + notification.getTitle());
-//            }
-//
-//        }
         if(remoteMessage.getData().size() > 0)
         {
             String action = remoteMessage.getData().get("title");
             Log.e(TAG, "onMessageReceived: "+ action );
             if(action.equals("lockDevice")) {
-                checkDataFromServerLock();
+                lockDevice("246800");
             }
             else if(action.equals("unLockDevice"))
             {
-                checkDataFromServerUnLock();
+                Log.e(TAG, "onMessageReceived: +unlock" );
+                unLockDevice();
             }
             else if(action.equals("updatePolicy"))
             {
@@ -156,100 +155,21 @@ public class FCMService extends FirebaseMessagingService {
         startService(watermarkIntent);
 
         //Block App
-
         Intent blockAppIntent = new Intent(this, BlockAppsService.class);
         startService(blockAppIntent);
+
         //Tracking Device
         Intent trackingLocationIntent = new Intent(this, LocationTrackingService.class);
         startService(trackingLocationIntent);
     }
 
     private void updatePolicy(String policy) {
-
         sendDatatoServer(policy);
     }
 
-    private void checkDataFromServerLock()
-    {
-        String serialNo = "15032001"; //Build.getSerial();
-        Log.e(TAG, "sendDataToServer: "+ serialNo );
-        FirebaseFirestore.getInstance().collection("information")
-                .whereEqualTo("serialNo", serialNo)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful())
-                        {
-                            for(QueryDocumentSnapshot doc : task.getResult())
-                            {
-                                String policy = doc.getString("policy");
-                                String []words = policy.split("");
-                                //Log.e(TAG, "getLockState: "+ words[3] );
-                                int stateLockDevice = Integer.parseInt(words[3]);
-                                if(stateLockDevice == 0)
-                                {
-                                    //lockDevice("1234");
-                                    int lenght = policy.length();
-                                    policy = "";
-                                    for(int i = 0 ; i< lenght ;i++)
-                                    {
-                                        if(i == 3)
-                                        {
-                                            policy += '1';    continue;
-                                        }
-                                        policy += words[i];
-                                    }
-                                    Log.e(TAG, "onComplete: "+ policy );
-                                    sendDatatoServer(policy);
-                                }
-                            }
-                        }
-                    }
-                });
-    }
-
-    private void checkDataFromServerUnLock()
-    {
-        String serialNo = "15032001";//Build.getSerial();
-        Log.e(TAG, "sendDataToServer: "+ serialNo );
-        FirebaseFirestore.getInstance().collection("information")
-                .whereEqualTo("serialNo", serialNo)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful())
-                        {
-                            for(QueryDocumentSnapshot doc : task.getResult())
-                            {
-                                String policy = doc.getString("policy");
-                                String []words = policy.split("");
-                                //Log.e(TAG, "getLockState: "+ words[3] );
-                                int stateLockDevice = Integer.parseInt(words[3]);
-                                if(stateLockDevice == 1)
-                                {
-                                    //unLockDevice();
-                                    int lenght = policy.length();
-                                    policy = "";
-                                    for(int i = 0 ; i< lenght ;i++)
-                                    {
-                                        if(i == 3)
-                                        {
-                                            policy += '0';    continue;
-                                        }
-                                        policy += words[i];
-                                    }
-                                    Log.e(TAG, "onComplete: "+ policy );
-                                    sendDatatoServer(policy);
-                                }
-                            }
-                        }
-                    }
-                });
-    }
-
     private void sendDatatoServer(String policy) {
-        DocumentReference dr = FirebaseFirestore.getInstance().collection("information")
-                .document("15032001"); //Build.getSerial());
+        DocumentReference dr = FirebaseFirestore.getInstance().collection("informations")
+                .document(Build.getSerial());
         dr.update("policy" , policy).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -263,7 +183,7 @@ public class FCMService extends FirebaseMessagingService {
         });
     }
 
-    /*public void lockDevice(String password) {
+    public void lockDevice(String password) {
         LockPatternUtils mLockPatternUtils = new LockPatternUtils(this);
         byte[] sha1;
         try {
@@ -272,17 +192,18 @@ public class FCMService extends FirebaseMessagingService {
             IWindowManager winMgr = IWindowManager.Stub.asInterface(ServiceManager.getService(Context.WINDOW_SERVICE));
             winMgr.lockNow(null);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         }
     }
 
     private void unLockDevice()
     {
+        Log.e(TAG, "unlock");
         LockPatternUtils mLockPatternUtils = new LockPatternUtils(this);
         mLockPatternUtils.saveRemoteLockPassword(LockPatternUtils.FMM_LOCK, null, 1000);
         mLockPatternUtils.setLockScreenDisabled(true, 1000);
-    }*/
+    }
 
 }

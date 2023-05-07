@@ -32,7 +32,7 @@ public class PrintWatermarkService extends Service {
     private String policy;
     private boolean isLoggedIn;
 
-    private final static String TAG = "PrintWatermarkService";
+    private final static String TAG = "PrintWatermarkService1";
 
     @Nullable
     @Override
@@ -113,7 +113,7 @@ public class PrintWatermarkService extends Service {
             txtView.setText(des.Encrypt("15032001"));
             txtView2.setText(des.Encrypt("15032001"));
 //            txtView.setText(des.Encrypt(Build.getSerial()));
-//            txtView2.setText(des.Encrypt(Build.getSerial()));
+//           txtView2.setText(des.Encrypt(Build.getSerial()));
         }
         else
         {
