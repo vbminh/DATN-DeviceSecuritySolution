@@ -1,11 +1,18 @@
 package view;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
 
+import receiver.EnterpriseDeviceAdminReceiver;
 import service.ForegroundService;
 import util.KnoxUtils;
 
@@ -24,13 +32,45 @@ public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = "MainActivity";
 
+    private DevicePolicyManager dpm;
+    private ComponentName cpn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        KnoxUtils.setActiveAdmin();
+        setActiveAdmin();
         checkLocationPermission();
         FirebaseApp.initializeApp(this);
+    }
+
+    private final ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == RESULT_OK) {
+                Log.e(TAG, "grant permission success");
+            }
+            else
+                System.exit(0);
+        }
+    });
+
+    private boolean setActiveAdmin() {
+        dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        cpn =  new ComponentName(this, EnterpriseDeviceAdminReceiver.class);
+        Log.e(TAG, "setActiveAdmin");
+
+        if (!dpm.isAdminActive(cpn)) {
+            Log.e(TAG, "isActiveAdmin: false");
+            // Nếu quyền chưa được cấp, hiển thị dialog yêu cầu cấp quyền.
+            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, cpn);
+            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "Please grant administrator permission to use the app.");
+            mGetContent.launch(intent);
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private void startApp() {

@@ -1,6 +1,7 @@
 package service;
 
 import android.app.Service;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.application.dssclient.R;
 
@@ -40,6 +42,7 @@ public class PrintWatermarkService extends Service {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
     public void onCreate() {
         super.onCreate();
@@ -51,6 +54,7 @@ public class PrintWatermarkService extends Service {
         showIcon();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e(TAG, "onStartCommand");
         customView.removeAllViews();
@@ -88,6 +92,7 @@ public class PrintWatermarkService extends Service {
         params.flags |= WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     private void createTextView() {
         SharedPreferences sharedPreferences = getSharedPreferences("my_app_prefs", Context.MODE_PRIVATE);
         policy = sharedPreferences.getString("policy", "11101");
@@ -105,20 +110,27 @@ public class PrintWatermarkService extends Service {
         initTextView();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
     private void initTextView() {
         TextView txtView = view.findViewById(R.id.txtViewOut);
         TextView txtView2 = view.findViewById(R.id.txtViewOut2);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
         {
-            txtView.setText(des.Encrypt("15032001"));
-            txtView2.setText(des.Encrypt("15032001"));
-//            txtView.setText(des.Encrypt(Build.getSerial()));
-//           txtView2.setText(des.Encrypt(Build.getSerial()));
+            txtView.setText(des.Encrypt("111111"));
+            txtView2.setText(des.Encrypt("111111"));
         }
         else
         {
             txtView.setText(des.Encrypt(Build.SERIAL));
             txtView2.setText(des.Encrypt(Build.SERIAL));
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private String getSerial() {
+        DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        devicePolicyManager.setOrganizationId(DevicePolicyManager.DELEGATION_CERT_INSTALL);
+
+        return devicePolicyManager.getEnrollmentSpecificId();
     }
 }

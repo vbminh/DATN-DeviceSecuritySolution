@@ -1,5 +1,7 @@
 package service;
 
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.IWindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.android.internal.widget.LockPatternUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,25 +33,55 @@ import java.util.Map;
 
 import algorithm.DES;
 import module.InformationDevice;
+import receiver.EnterpriseDeviceAdminReceiver;
 
 public class FCMService extends FirebaseMessagingService {
     private static final String TAG = "FCMService1";
 
     private InformationDevice informationDevice;
 
+    private DevicePolicyManager devicePolicyManager;
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        Log.e(TAG, "onNewToken: "+ token );
-        Log.e(TAG, "onNewToken: "+ Build.getSerial() );
+        Log.e(TAG, "onNewToken: "+ token);
+
+        boolean isActive = isActiveAdmin();
+        while (!isActive) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            isActive = isActiveAdmin();
+        }
 
         SharedPreferences sharedPreferences = getSharedPreferences("my_app_prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("policy", "11111");
         editor.apply();
 
-        informationDevice = new InformationDevice("11111" , Build.getSerial() , token);
+        informationDevice = new InformationDevice("11111" , getSerial() , token);
+
         pushNewInformationToServer();
+    }
+
+    private boolean isActiveAdmin() {
+        devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        ComponentName cpn =  new ComponentName(this, EnterpriseDeviceAdminReceiver.class);
+        Log.e(TAG, "is Active Admin");
+
+        return devicePolicyManager.isAdminActive(cpn);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private String getSerial() {
+        devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        devicePolicyManager.setOrganizationId(DevicePolicyManager.DELEGATION_CERT_INSTALL);
+
+        return devicePolicyManager.getEnrollmentSpecificId();
     }
 
     private void pushNewInformationToServer() {

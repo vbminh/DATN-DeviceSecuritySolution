@@ -52,6 +52,7 @@ public class KnoxUtils {
                 Log.e(TAG, "setActiveAdmin");
                 method = EnterpriseDeviceManager.class.getMethod("setActiveAdmin",
                         ComponentName.class, boolean.class);
+                Log.e(TAG, getComponentName() +" ");
                 method.invoke(getEDM(), getComponentName(), false);
                 Log.e(TAG, "success");
             } catch (NoSuchMethodException e) {
@@ -64,6 +65,8 @@ public class KnoxUtils {
                 //  Log.e(TAG, e.getMessage(), e);
             }
         }
+        else
+            Log.e(TAG, "dầdsafs");
     }
 
     public static void setAdminRemovable(boolean removable) {
